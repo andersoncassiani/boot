@@ -2,7 +2,7 @@
 const axios = require('axios');
 const { token, phoneNumberId } = require('../config/whatsapp');
 
-// Funci¨®n original de env¨ªo
+
 async function sendMessage(to, text) {
   try {
     const url = `https://graph.facebook.com/v20.0/${phoneNumberId}/messages`;
@@ -19,16 +19,16 @@ async function sendMessage(to, text) {
     };
 
     const response = await axios.post(url, payload, { headers });
-    console.log(`”9à2 Mensaje enviado a ${to}: "${text.substring(0, 50)}..."`);
+    console.log(`â€9Ã 2 Mensaje enviado a ${to}: "${text.substring(0, 50)}..."`);
     return response.data;
   } catch (error) {
     const errorInfo = error.response?.data || error.message;
-    console.error(`7Ã4 Error al enviar el mensaje a ${to}:`, JSON.stringify(errorInfo, null, 2));
+    console.error(`Â7Ãƒ4 Error al enviar el mensaje a ${to}:`, JSON.stringify(errorInfo, null, 2));
     throw new Error('Error al enviar el mensaje. ' + JSON.stringify(errorInfo));
   }
 }
 
-// 8¬2 SOLO typing indicators nativos (3 puntos reales)
+
 async function sendTypingIndicator(to, action = 'typing_on') {
   try {
     const url = `https://graph.facebook.com/v20.0/${phoneNumberId}/messages`;
@@ -44,29 +44,29 @@ async function sendTypingIndicator(to, action = 'typing_on') {
       'Content-Type': 'application/json'
     };
     
-    console.log(`”9ã4 Enviando typing indicator ${action} a ${to}...`);
+    console.log(`â€9Ã£4 Enviando typing indicator ${action} a ${to}...`);
     const response = await axios.post(url, payload, { headers });
-    console.log(`”9ß5 7¼3 Typing indicator ${action} enviado exitosamente`);
+    console.log(`â€9ÃŸ5 Â7Â¼3 Typing indicator ${action} enviado exitosamente`);
     return response.data;
   } catch (error) {
-    console.error(`7Ã4 Error en typing indicator:`, error.response?.data || error.message);
+    console.error(`Â7Ãƒ4 Error en typing indicator:`, error.response?.data || error.message);
     
     // Log detallado para debug
     if (error.response?.status === 400) {
-      console.error('•04 Error 400: Posible problema de permisos o formato');
+      console.error('â€¢0Â4 Error 400: Posible problema de permisos o formato');
     }
     if (error.response?.status === 401) {
-      console.error('•04 Error 401: Token inv¨¢lido o expirado');
+      console.error('â€¢0Â4 Error 401: Token invÂ¨Â¢lido o expirado');
     }
     
     throw error;
   }
 }
 
-// 8¬2 Funci¨®n limpia - SOLO 3 puntos nativos
+
 async function sendMessageWithTyping(to, text, type = 'text', duration = 2000) {
   try {
-    console.log(`75„1‚5 Iniciando typing nativo para ${to} por ${duration}ms`);
+    console.log(`Â7Â5â€ž1â€š5 Iniciando typing nativo para ${to} por ${duration}ms`);
     
     // 1. Mostrar los 3 puntos nativos
     await sendTypingIndicator(to, 'typing_on');
@@ -74,23 +74,23 @@ async function sendMessageWithTyping(to, text, type = 'text', duration = 2000) {
     // 2. Esperar (usuario ve los 3 puntos)
     await new Promise(resolve => setTimeout(resolve, duration));
     
-    // 3. Los 3 puntos desaparecen autom¨¢ticamente al enviar mensaje
+    // 3. Los 3 puntos desaparecen automÂ¨Â¢ticamente al enviar mensaje
     const response = await sendMessage(to, text);
     
-    console.log(`7¼3 Mensaje con typing nativo enviado correctamente`);
+    console.log(`Â7Â¼3 Mensaje con typing nativo enviado correctamente`);
     return response;
     
   } catch (error) {
-    console.error('7Ã4 Error en typing nativo, enviando mensaje directo...');
+    console.error('Â7Ãƒ4 Error en typing nativo, enviando mensaje directo...');
     // Si falla el typing, enviar mensaje sin delay
     return await sendMessage(to, text);
   }
 }
 
-// 8¬2 Alternativa con solo delay (sin mensajes visibles)
+
 async function sendMessageWithDelay(to, text, duration = 2000) {
   try {
-    console.log(`75„1‚5 Esperando ${duration}ms antes de enviar mensaje...`);
+    console.log(`Â7Â5â€ž1â€š5 Esperando ${duration}ms antes de enviar mensaje...`);
     
     // Solo esperar sin enviar nada
     await new Promise(resolve => setTimeout(resolve, duration));
@@ -99,7 +99,7 @@ async function sendMessageWithDelay(to, text, duration = 2000) {
     return await sendMessage(to, text);
     
   } catch (error) {
-    console.error('7Ã4 Error en sendMessageWithDelay:', error);
+    console.error('Â7Ãƒ4 Error en sendMessageWithDelay:', error);
     throw error;
   }
 }
