@@ -1,12 +1,10 @@
 // app.js
-
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 const webhookRoutes = require('./routes/webhook');
 const sendRoutes = require('./routes/send');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
